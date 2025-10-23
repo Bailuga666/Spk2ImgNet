@@ -27,10 +27,17 @@ parser.add_argument(
     "--result_dir", type=str, default="results/", help="path of results"
 )
 parser.add_argument(
-    "--exist_gt", type=bool, default=True, help="exist ground truth or not"
+    "--exist_gt", default=True, help="exist ground truth or not (True/False)"
+)
+parser.add_argument(
+    "--no-gt", dest='exist_gt', action='store_false', help='shorthand to disable ground truth checking'
 )
 parser.add_argument("--model_name", type=str, default="model_041.pth", help="Name of ckp")
 opt = parser.parse_args()
+
+# Coerce exist_gt if passed as a string (argparse with type=bool earlier treated strings as True)
+if isinstance(opt.exist_gt, str):
+    opt.exist_gt = opt.exist_gt.lower() in ("1", "true", "yes", "y")
 
 
 def normalize(data):
